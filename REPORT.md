@@ -76,6 +76,7 @@ not yet observed by me — use the `BEGIN;/rollback;` smoke test in the SQL Edit
 | Invalid record rejected and saves nothing | DB checks + client validation present; not observed live | **UNVERIFIED** |
 | Committed & pushed to GitHub `VivekMOSPL/ConsultantentCRM` | `git push -u origin main` -> `* [new branch] main -> main`; `git ls-remote origin` -> `refs/heads/main` + `HEAD` at `44c7e2a` | DONE |
 | Vercel deploy | `vercel` CLI not installed here, no Vercel token held; repo is public & import-ready | **NOT DONE** (needs your Vercel + env vars) |
+| Login credentials valid server-side | `POST /auth/v1/admin/users` -> `201` (id `b94ba9ff-…`, confirmed); `POST /auth/v1/token?grant_type=password` -> `200` + JWT (role `authenticated`) | **VERIFIED** |
 
 ## Open decision (PRD O1)
 
@@ -90,8 +91,7 @@ lines, change `PRD.md` first, then the schema and `requirement_summary`.
    stored in the repo.
 1. Run the `BEGIN; … rollback;` smoke test at the bottom of `RAMCRM/supabase/schema.sql` in the
    Supabase **SQL Editor** → expect `100/65/35`, then `100/115/-15`, then rollback (zero rows kept).
-2. Create an authenticated user in **Authentication → Users → Add user**, enable Email sign-in, and
-   keep **public sign-up OFF**.
+2. Create authenticated users via **Authentication → Users → Add user** (or the Admin API) — never with a raw `insert into auth.users`: that creates an orphan row with `instance_id=null` + an unsupported hash that GoTrue can't see (so sign-in fails with `invalid_credentials`) and that blocks later creation with `23505 users_email_partial_key`. Keep **public sign-up OFF**, enable Email sign-in.
 3. `npm run dev` → sign in → add Customer → OEM → Requirement (line items + deadline) → link OEM →
    add shipments, and confirm the bold uncovered number moves.
 4. Deploy to Vercel only on a commercial-allowed plan, setting the same two `NEXT_PUBLIC_*` vars.
