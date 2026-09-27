@@ -74,6 +74,8 @@ not yet observed by me — use the `BEGIN;/rollback;` smoke test in the SQL Edit
 | Sign-in / RLS blocks unauthorised reads | anon reads → 401; `GET /` (no session) → 307 → `/login` | CONFIRMED |
 | Uncovered shows 100−65=35 on real data | not observed live (DB port blocked from here) | **UNVERIFIED** — run the SQL-Editor smoke test |
 | Invalid record rejected and saves nothing | DB checks + client validation present; not observed live | **UNVERIFIED** |
+| Committed & pushed to GitHub `VivekMOSPL/ConsultantentCRM` | `git push -u origin main` -> `* [new branch] main -> main`; `git ls-remote origin` -> `refs/heads/main` + `HEAD` at `44c7e2a` | DONE |
+| Vercel deploy | `vercel` CLI not installed here, no Vercel token held; repo is public & import-ready | **NOT DONE** (needs your Vercel + env vars) |
 
 ## Open decision (PRD O1)
 
